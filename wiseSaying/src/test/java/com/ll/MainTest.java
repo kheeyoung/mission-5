@@ -50,4 +50,20 @@ public class MainTest {
 
         Assertions.assertTrue(output.contains("번호 / 작가 / 명언"));
     }
+
+    @Test
+    @DisplayName("삭제 테스트")
+    void deleteTest() throws IOException {
+        // Given
+        App app = new App();
+        String input = "삭제?id=1\n종료\n";
+
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        // 실행
+        app.run();
+
+
+    }
 }

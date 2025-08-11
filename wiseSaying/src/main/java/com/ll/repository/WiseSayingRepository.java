@@ -75,7 +75,7 @@ public class WiseSayingRepository {
 
     public List<WiseSaying> getList(int i) {
         try {
-            String sql = "SELECT * FROM wise_saying ORDER BY id DESC LIMIT " + (i - 1) * 5 + ", 5";
+            String sql = "SELECT * FROM wise_saying ORDER BY id ASC LIMIT " + (i - 1) * 5 + ", 5";
             var rs = stmt.executeQuery(sql);
             List<WiseSaying> list = new java.util.ArrayList<>();
             while (rs.next()) {
@@ -98,7 +98,7 @@ public class WiseSayingRepository {
                 sql.append(key).append(" LIKE '%").append(keys.get(key)).append("%' AND ");
             }
             sql.setLength(sql.length() - 5); // 마지막 AND 제거
-            sql.append(" ORDER BY id DESC LIMIT ").append((i - 1) * 5).append(", 5");
+            sql.append(" ORDER BY id ASC LIMIT ").append((i - 1) * 5).append(", 5");
 
             var rs = stmt.executeQuery(sql.toString());
             List<WiseSaying> list = new java.util.ArrayList<>();
@@ -111,6 +111,15 @@ public class WiseSayingRepository {
             return list;
         } catch (SQLException e) {
             return List.of();
+        }
+    }
+
+    public int delete(int i) {
+        try{
+            String sql = "DELETE FROM wise_saying WHERE id = " + i;
+            return stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            return -1;
         }
     }
 }

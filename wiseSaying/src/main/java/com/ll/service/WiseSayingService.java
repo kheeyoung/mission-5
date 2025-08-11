@@ -34,4 +34,8 @@ public class WiseSayingService {
         //검색 조건이 있을 때
         return wr.searchList(keys, i);
     }
+
+    public int delete(int i) {
+        return wr.delete(i);
+    }
 }

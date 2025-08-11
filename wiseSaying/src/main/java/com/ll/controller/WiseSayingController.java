@@ -82,4 +82,17 @@ public class WiseSayingController {
 
         return map;
     }
+
+    public void delete(String commend) {
+        String[] id = commend.split("=");
+        if(id.length<2 || ! id[0].contains(("id"))) {
+            System.out.println("정확한 id를 입력해주세요.");
+            return;
+        }
+        if (ws.delete(Integer.parseInt(id[1])) <=0) {
+            System.out.println(id[1]+"번 명언은 존재하지 않습니다.");
+            return;
+        }
+        System.out.println(id[1]+"번 명언이 삭제되었습니다.");
+    }
 }

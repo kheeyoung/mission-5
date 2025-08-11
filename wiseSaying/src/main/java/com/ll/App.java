@@ -39,7 +39,7 @@ public class App {
                     break;
 
                 case "삭제":
-
+                    wc.delete(commend);
                     break;
 
                 case "빌드":
