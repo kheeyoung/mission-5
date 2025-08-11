@@ -1,9 +1,11 @@
 package com.ll.controller;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 
 import com.ll.entity.WiseSaying;
@@ -11,7 +13,11 @@ import com.ll.entity.WiseSaying;
 import com.ll.service.WiseSayingService;
 
 public class WiseSayingController {
+    private Scanner sc;
 
+    public WiseSayingController(Scanner sc) {
+        this.sc = sc;
+    }
     WiseSayingService ws = new WiseSayingService();
     public int connectDB() {
         if(ws.connectDB()==0){
@@ -24,12 +30,11 @@ public class WiseSayingController {
     }
 
     public void insert() {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {
             System.out.print("명언 : ");
-            String quote = br.readLine();
+            String quote = sc.nextLine();
             System.out.print("작가 : ");
-            String writer = br.readLine();
+            String writer = sc.nextLine();
             int id = ws.insert(new WiseSaying(0, quote, writer));
             System.out.println(id + "번 명언이 등록되었습니다.");
         } catch (Exception e) {
@@ -103,9 +108,32 @@ public class WiseSayingController {
             return;
         }
         if(ws.makeFile(data)==0){
-            System.out.println("build.json 파일이 생성되었습니다.");
+            System.out.println("build.json 파일의 내용이 갱신되었습니다.");
         } else {
             System.out.println("파일 생성에 실패했습니다.");
         }
+    }
+
+    public void update(String commend) throws IOException {
+        String[] id = commend.split("=");
+        if(id.length<2 || ! id[0].contains(("id"))) {
+            System.out.println("정확한 id를 입력해주세요.");
+            return;
+        }
+        WiseSaying data = ws.getWsbyId(Integer.parseInt(id[1]));
+
+        if (data.getId() ==0) {
+            System.out.println(id[1]+"번 명언은 존재하지 않습니다.");
+            return;
+        }
+
+        System.out.print("명언(기존) : "+data.getQuote()+"\n");
+        System.out.print("명언 : ");
+        data.setQuote(sc.nextLine());
+        System.out.print("작가(기존) : "+data.getWriter()+"\n");
+        System.out.print("작가 : ");
+        data.setWriter(sc.nextLine());
+
+        ws.update(data);
     }
 }

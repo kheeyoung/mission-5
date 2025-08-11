@@ -141,4 +141,29 @@ public class WiseSayingRepository {
         }
         return list;
     }
+
+    public WiseSaying getWsbyId(int i) {
+        WiseSaying result= new WiseSaying(0, "", "");
+        try{
+            String sql = "SELECT * FROM wise_saying WHERE id = " + i;
+            var rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                result.setId(i);
+                result.setQuote(rs.getString("quote"));
+                result.setWriter(rs.getString("writer"));
+
+            }
+        } catch (SQLException e) {
+
+        }
+        return result;
+    }
+
+    public void update(WiseSaying data) {
+        try {
+            String sql = "UPDATE wise_saying SET quote = '" + data.getQuote() + "', writer = '" + data.getWriter() + "' WHERE id = " + data.getId();
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+        }
+    }
 }

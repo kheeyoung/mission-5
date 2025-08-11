@@ -5,22 +5,29 @@ import com.ll.controller.WiseSayingController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class App {
+    private Scanner sc;
 
-    WiseSayingController wc = new WiseSayingController();
+    public App(Scanner sc) {
+        this.sc = sc;
+    }
+
+
     public void run() throws IOException {
+        WiseSayingController wc = new WiseSayingController(sc);
 
         if(wc.connectDB()==-1){
             return;
         }
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
 
         System.out.println("== 명언 앱 ==");
 
         while (true) {
             System.out.print("명령) :");
-            String commend = br.readLine();
+            String commend = sc.nextLine();
             switch (commend.substring(0,2)) {
                 case "종료":
                     System.out.println("앱을 종료합니다.");
@@ -35,7 +42,7 @@ public class App {
                     break;
 
                 case "수정":
-
+                    wc.update(commend);
                     break;
 
                 case "삭제":

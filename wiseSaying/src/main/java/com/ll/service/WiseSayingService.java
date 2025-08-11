@@ -65,4 +65,12 @@ public class WiseSayingService {
             return -1;
         }
     }
+
+    public WiseSaying getWsbyId(int i) {
+        return wr.getWsbyId(i);
+    }
+
+    public void update(WiseSaying data) {
+        wr.update(data);
+    }
 }
