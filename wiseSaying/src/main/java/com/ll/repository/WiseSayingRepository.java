@@ -1,4 +1,4 @@
-package com.ll;
+package com.ll.repository;
 
 import com.ll.entity.WiseSaying;
 
@@ -6,8 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.List;
 
-class WiseSayingRepository {
+public class WiseSayingRepository {
     public static Statement stmt;
     private Connection con;
 
@@ -68,6 +70,47 @@ class WiseSayingRepository {
             return ws.getId();
         } catch (SQLException e) {
            return -1;
+        }
+    }
+
+    public List<WiseSaying> getList(int i) {
+        try {
+            String sql = "SELECT * FROM wise_saying ORDER BY id DESC LIMIT " + (i - 1) * 5 + ", 5";
+            var rs = stmt.executeQuery(sql);
+            List<WiseSaying> list = new java.util.ArrayList<>();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String quote = rs.getString("quote");
+                String writer = rs.getString("writer");
+                list.add(new WiseSaying(id, quote, writer));
+            }
+            return list;
+        } catch (SQLException e) {
+            System.out.println("DB 조회 실패: " + e.getMessage());
+            return List.of();
+        }
+    }
+
+    public List<WiseSaying> searchList(HashMap<String, String> keys, int i) {
+        try{
+            StringBuilder sql = new StringBuilder("SELECT * FROM wise_saying WHERE ");
+            for (String key : keys.keySet()) {
+                sql.append(key).append(" LIKE '%").append(keys.get(key)).append("%' AND ");
+            }
+            sql.setLength(sql.length() - 5); // 마지막 AND 제거
+            sql.append(" ORDER BY id DESC LIMIT ").append((i - 1) * 5).append(", 5");
+
+            var rs = stmt.executeQuery(sql.toString());
+            List<WiseSaying> list = new java.util.ArrayList<>();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String quote = rs.getString("quote");
+                String writer = rs.getString("writer");
+                list.add(new WiseSaying(id, quote, writer));
+            }
+            return list;
+        } catch (SQLException e) {
+            return List.of();
         }
     }
 }

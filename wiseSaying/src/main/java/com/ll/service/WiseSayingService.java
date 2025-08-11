@@ -1,8 +1,13 @@
-package com.ll;
+package com.ll.service;
 
 import com.ll.entity.WiseSaying;
+import com.ll.repository.WiseSayingRepository;
 
-class WiseSayingService {
+import java.util.HashMap;
+import java.util.List;
+
+
+public class WiseSayingService {
 
     WiseSayingRepository wr = new WiseSayingRepository();
 
@@ -19,5 +24,14 @@ class WiseSayingService {
             System.out.println("명언 등록 실패: " + e.getMessage());
             return -1;
         }
+    }
+
+    public List<WiseSaying> getList(HashMap<String, String> keys, int i) {
+        //검색 조건이 없을 때
+        if( keys.isEmpty()) {
+            return wr.getList(i);
+        }
+        //검색 조건이 있을 때
+        return wr.searchList(keys, i);
     }
 }

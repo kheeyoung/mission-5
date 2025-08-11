@@ -1,5 +1,7 @@
 package com.ll;
 
+import com.ll.controller.WiseSayingController;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,7 +19,7 @@ public class App {
         System.out.println("== 명언 앱 ==");
 
         while (true) {
-            System.out.println("명령) :");
+            System.out.print("명령) :");
             String commend = br.readLine();
             switch (commend.substring(0,2)) {
                 case "종료":

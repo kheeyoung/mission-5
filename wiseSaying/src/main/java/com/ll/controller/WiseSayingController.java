@@ -1,13 +1,16 @@
-package com.ll;
+package com.ll.controller;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
+
 
 import com.ll.entity.WiseSaying;
 import com.ll.entity.WiseSaying;
+import com.ll.service.WiseSayingService;
 
-class WiseSayingController {
+public class WiseSayingController {
 
     WiseSayingService ws = new WiseSayingService();
     public int connectDB() {
@@ -35,22 +38,48 @@ class WiseSayingController {
     }
 
     public void showList(String commend) {
+        HashMap<String, String> keys= getKey(commend);
+
+        String page = keys.remove("page");
+        if(page == null){
+            page = "1";
+        }
+        List<WiseSaying> data= ws.getList(keys, Integer.parseInt(page));
+
+        if(data.isEmpty()){
+            System.out.println("등록된 명언이 없습니다.");
+            return;
+        }
+
+        System.out.println("번호 / 작가 / 명언");
+        System.out.println("-------------------------");
+        for(WiseSaying ws : data){
+            System.out.println(ws.getId() + " / " + ws.getWriter() + " / " + ws.getQuote());
+        }
 
     }
     public HashMap<String, String> getKey(String commend){
         commend = commend.replace("목록?", "");
-        String [] parts = commend.split("&");
+        String [] parts = commend.split("=");
 
         HashMap<String, String> map = new HashMap<>();
-        for (String part : parts) {
-            String[] keyValue = part.split("=");
-            if (keyValue.length == 2
-                    && (keyValue[0].equals("page") || keyValue[0].equals("keyword") ||
-                    keyValue[0].equals("keywordType"))
-                    && keyValue[1] != null) {
-                map.put(keyValue[0].trim(), keyValue[1].trim());
+
+        //검색 하는 경우
+        if(parts[0].equals("keywordType")){
+            String[] key = parts[1].split("&");
+            for(String k : key){
+                map.put(k, parts[2]);
+            }
+            if(parts.length>3 && parts[3].startsWith("page")){
+                map.put("page", parts[3]);
             }
         }
+
+        //검색 없는 경우
+        else if(parts[0].equals("page")){
+            map.put("page", parts[1]);
+        }
+
         return map;
     }
 }
