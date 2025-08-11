@@ -63,7 +63,19 @@ public class MainTest {
 
         // 실행
         app.run();
+    }
 
+    @Test
+    @DisplayName("빌드 테스트")
+    void buildTest() throws IOException {
+        // Given
+        App app = new App();
+        String input = "빌드\n종료\n";
 
+        InputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
+
+        // 실행
+        app.run();
     }
 }

@@ -43,6 +43,7 @@ public class App {
                     break;
 
                 case "빌드":
+                    wc.build();
 
                     break;
 

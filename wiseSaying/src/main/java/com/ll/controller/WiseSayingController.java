@@ -95,4 +95,17 @@ public class WiseSayingController {
         }
         System.out.println(id[1]+"번 명언이 삭제되었습니다.");
     }
+
+    public void build() {
+        List<WiseSaying> data = ws.getAlldata();
+        if(data.isEmpty()){
+            System.out.println("등록된 명언이 없습니다.");
+            return;
+        }
+        if(ws.makeFile(data)==0){
+            System.out.println("build.json 파일이 생성되었습니다.");
+        } else {
+            System.out.println("파일 생성에 실패했습니다.");
+        }
+    }
 }

@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -121,5 +122,23 @@ public class WiseSayingRepository {
         } catch (SQLException e) {
             return -1;
         }
+    }
+
+    public List<WiseSaying> getAllData() {
+        List<WiseSaying> list = new ArrayList<>();
+        try {
+            String sql = "SELECT *FROM wise_saying";
+            var rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String quote = rs.getString("quote");
+                String writer = rs.getString("writer");
+                list.add(new WiseSaying(id, quote, writer));
+            }
+        } catch (SQLException e) {
+            return list;
+        }
+        return list;
     }
 }

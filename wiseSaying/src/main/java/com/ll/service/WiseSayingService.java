@@ -3,6 +3,9 @@ package com.ll.service;
 import com.ll.entity.WiseSaying;
 import com.ll.repository.WiseSayingRepository;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -37,5 +40,29 @@ public class WiseSayingService {
 
     public int delete(int i) {
         return wr.delete(i);
+    }
+
+    public List<WiseSaying> getAlldata() {
+        return wr.getAllData();
+    }
+
+    public int makeFile(List<WiseSaying> data) {
+
+
+        // 파일 출력
+        try (FileWriter file = new FileWriter("build.json")) {
+            String content="";
+            for(WiseSaying ws : data) {
+                content += "{\n" +
+                        "  \"id\": " + ws.getId() + ",\n" +
+                        "  \"quote\": \"" + ws.getQuote() + "\",\n" +
+                        "  \"writer\": \"" + ws.getWriter() + "\"\n" +
+                        "},\n";
+            }
+            file.write(content);
+            return 0;
+        } catch (IOException e) {
+            return -1;
+        }
     }
 }
